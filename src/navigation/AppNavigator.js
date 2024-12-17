@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import DrawerNavigator from "./DrawerNavigator";
+import { navigationRef } from "../../navigationRef";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="SignIn">
         <Stack.Screen
           name="SignIn"

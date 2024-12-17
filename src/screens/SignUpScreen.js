@@ -1,10 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import AuthForm from "../components/AuthForm";
 
 export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SignUp</Text>
+      <AuthForm
+        headerText={"Sign in"}
+        errorMessage={null}
+        onSubmit={null}
+        submitButtonText={"Sign in"}
+      />
     </View>
   );
 }
