@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import AuthForm from "../components/AuthForm";
+import SignUpForm from "../components/SignUpForm";
+import { Context as AuthContext } from "../context/AuthContext";
 
 export default function SignUpScreen() {
+  const { state, signin } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SignUp</Text>
-      <AuthForm
-        headerText={"Sign in"}
-        errorMessage={null}
-        onSubmit={null}
+      <SignUpForm
+        headerText={"Sign up"}
+        errorMessage={state.errorMessage}
+        onSubmit={signin}
         submitButtonText={"Sign in"}
       />
     </View>

@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import NavLink from "../components/NavLink";
-import { Context } from "../context/AuthContext";
+import { Context as AuthContext } from "../context/AuthContext";
 import AuthForm from "../components/AuthForm";
 
 export default function SignInScreen() {
-  const { state, signin } = useContext(Context);
+  const { state, signin } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
