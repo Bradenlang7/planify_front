@@ -2,7 +2,7 @@ import createDataContext from "./createDataContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import planifyApi from "../api/planify";
 import { navigate } from "../../navigationRef";
-import { saveCredentials } from "../../authStorage";
+import { saveSecureData, getSecureData } from "../../SecureStorageService";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -21,9 +21,7 @@ const signin =
         username: email, // NEED TO FIX
         password,
       });
-      await saveCredentials(response.data.token);
-      await AsyncStorage.setItem("id", response.id);
-
+      await saveSecureData("token", response.data.token);
       navigate("MainApp");
     } catch (err) {
       console.log(err);
@@ -38,6 +36,9 @@ const signup =
   (dispatch) =>
   async ({ firstname, lastname, username, email, password }) => {
     try {
+      console.log(
+        "running sign up" + firstname + lastname + username + email + password
+      );
       const response = await planifyApi.post("/api/users", {
         firstname,
         lastname,
@@ -45,7 +46,7 @@ const signup =
         email,
         password,
       });
-      await saveCredentials(response.data.token);
+      await saveSecureData("token", response.data.token);
       navigate("MainApp");
     } catch (err) {
       console.log(err);
@@ -58,6 +59,6 @@ const signup =
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signin },
+  { signin, signup },
   { token: null, errorMessage: "" }
 );

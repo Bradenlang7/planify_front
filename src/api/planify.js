@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCredentials } from "../../authStorage";
+import { getSecureData } from "../../SecureStorageService";
 
 const instance = axios.create({
   baseURL: "http://192.168.0.100:8080",
@@ -9,10 +9,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async (config) => {
     // Retrieve credentials (token) from secure storage
-    const credentials = await getCredentials();
-    if (credentials.token) {
+    const token = await getSecureData("token");
+    if (token) {
       // Attach token only if it exists
-      config.headers.Authorization = `Bearer ${credentials.token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config; // Proceed with the request
