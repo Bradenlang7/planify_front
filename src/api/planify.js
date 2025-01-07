@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getSecureData } from "../../SecureStorageService";
+import { getSecureData } from "../utils/SecureStorageService";
 
 const instance = axios.create({
   baseURL: "http://192.168.0.100:8080",

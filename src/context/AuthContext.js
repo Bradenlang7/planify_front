@@ -1,8 +1,10 @@
 import createDataContext from "./createDataContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import planifyApi from "../api/planify";
 import { navigate } from "../../navigationRef";
-import { saveSecureData, getSecureData } from "../../SecureStorageService";
+import {
+  saveSecureData,
+  deleteSecureData,
+} from "../utils/SecureStorageService";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -18,7 +20,7 @@ const signin =
   async ({ email, password }) => {
     try {
       const response = await planifyApi.post("/api/auth/login", {
-        username: email, // NEED TO FIX
+        email,
         password,
       });
       await saveSecureData("token", response.data.token);
@@ -32,13 +34,20 @@ const signin =
     }
   };
 
+//Dispatch not used for signout need to find better location
+const signout = (dispatch) => async () => {
+  try {
+    await deleteSecureData("token");
+    navigate("SignIn");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const signup =
   (dispatch) =>
   async ({ firstname, lastname, username, email, password }) => {
     try {
-      console.log(
-        "running sign up" + firstname + lastname + username + email + password
-      );
       const response = await planifyApi.post("/api/users", {
         firstname,
         lastname,
@@ -59,6 +68,6 @@ const signup =
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signin, signup },
+  { signin, signup, signout },
   { token: null, errorMessage: "" }
 );
