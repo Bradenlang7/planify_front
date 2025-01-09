@@ -35,13 +35,7 @@ export default function AppNavigator() {
         <Stack.Screen
           name="MainApp"
           component={DrawerNavigator}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="CreatePlan"
-          component={CreatePlanScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, gestureEnabled: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import planifyApi from "../api/planify";
 import {
   Text,
   TextInput,
@@ -8,12 +9,30 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { Context as PlanContext } from "../context/PlanContext";
 
 export default function CreatePlanScreen() {
-  const { state, createPlan } = useContext(PlanContext);
+  //method makes api call to create a plan in the db
+  const createPlan = async ({
+    title,
+    description,
+    location,
+    startTime,
+    endTime,
+  }) => {
+    try {
+      await planifyApi.post("/api/plans", {
+        title,
+        description,
+        location,
+        startTime,
+        endTime,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  // Initialize with the current date and time in ISO 8601 format
+  // Initialize with the current date and time in ISO 8601 format for testing
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");

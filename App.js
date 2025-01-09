@@ -4,9 +4,7 @@ import AppNavigator from "./src/navigation/AppNavigator";
 import React, { useEffect } from "react";
 import axiosInstance from "./src/api/planify";
 import { Provider as AuthProvider } from "./src/context/AuthContext";
-import { Provider as PlanProvider } from "./src/context/PlanContext";
 import { navigationRef } from "./navigationRef";
-import { Provider } from "./src/context/PlanContext";
 
 export default function App() {
   /*
@@ -29,13 +27,11 @@ export default function App() {
   */
 
   return (
-    <PlanProvider>
-      <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AppNavigator />
-        </GestureHandlerRootView>
-      </AuthProvider>
-    </PlanProvider>
+    <AuthProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AppNavigator />
+      </GestureHandlerRootView>
+    </AuthProvider>
   );
 }
 
