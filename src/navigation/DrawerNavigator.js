@@ -5,7 +5,7 @@ import DashboardScreen from "../screens/DashBoardScreen";
 import CreatePlanScreen from "../screens/CreatePlanScreen";
 import FriendsScreen from "../screens/FriendsScreen";
 import AccountScreen from "../screens/AccountScreen";
-import PlanDetailsScreen from "../screens/PlanDetails";
+import PlanDetailsScreen from "../screens/PlanDetailsScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();

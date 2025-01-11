@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context as UserContext } from "../context/UserContext";
 import {
   ScrollView,
   View,
@@ -8,17 +9,35 @@ import {
   TextInput,
 } from "react-native";
 
-export default function CommentWindow({ comments, onAddComment }) {
+export default function CommentWindow({
+  comments,
+  postCommentsFunction,
+  deleteCommentFunction,
+}) {
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const { state } = useContext(UserContext);
+  const [selectedCommentId, setSelectedCommentId] = useState(null);
+  const userName = state.userName;
 
+  //toggles comment box
   const handleAddCommentPress = () => {
-    setIsAddingComment(true);
+    setIsAddingComment((prev) => !prev);
+  };
+
+  const handleCommentPress = (commentId) => {
+    // Toggle the delete button for the selected comment
+    setSelectedCommentId((prev) => (prev === commentId ? null : commentId));
+  };
+
+  const handleDeleteComment = (commentId) => {
+    deleteCommentFunction(commentId);
+    setSelectedCommentId(null);
   };
 
   const handleSubmitComment = () => {
     if (newComment.trim() !== "") {
-      onAddComment(newComment);
+      postCommentsFunction(newComment);
       setNewComment("");
       setIsAddingComment(false);
     }
@@ -29,11 +48,38 @@ export default function CommentWindow({ comments, onAddComment }) {
       <Text style={styles.commentHeader}>Comments</Text>
       <ScrollView>
         {comments && comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <View key={index} style={styles.comment}>
-              <Text style={styles.commentText}>{comment}</Text>
-            </View>
-          ))
+          comments.map((comment) =>
+            comment.commenterUserName === userName ? (
+              //render touchable comment if the comment is user owned
+              <TouchableOpacity
+                key={comment.id}
+                style={styles.comment}
+                onPress={() => handleCommentPress(comment.id)}
+              >
+                <Text style={styles.commentText}>
+                  {comment.commenterUserName}
+                </Text>
+                <Text style={styles.commentText}>{comment.content}</Text>
+                {/* Show Delete Button if this comment is selected */}
+                {selectedCommentId === comment.id && (
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDeleteComment(comment.id)}
+                  >
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                )}
+              </TouchableOpacity>
+            ) : (
+              // Other users' comments are not touchable
+              <View key={comment.id} style={styles.comment}>
+                <Text style={styles.commentText}>
+                  {comment.commenterUserName}
+                </Text>
+                <Text style={styles.commentText}>{comment.content}</Text>
+              </View>
+            )
+          )
         ) : (
           <Text style={styles.noCommentsText}>No comments yet.</Text>
         )}
@@ -70,6 +116,7 @@ export default function CommentWindow({ comments, onAddComment }) {
 
 const styles = StyleSheet.create({
   commentContainer: {
+    flex: 1,
     marginTop: 20,
     padding: 16,
     backgroundColor: "#fff",
@@ -129,6 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 70,
   },
   textInput: {
     flex: 1,
@@ -147,5 +195,17 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    marginTop: 5,
+    backgroundColor: "#ff4d4d",
+    padding: 8,
+    borderRadius: 5,
+    alignItems: "center",
   },
 });

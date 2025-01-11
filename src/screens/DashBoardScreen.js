@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import planifyApi from "../api/planify";
+import { Context as UserContext } from "../context/UserContext";
 import {
   View,
   Text,
@@ -9,14 +10,38 @@ import {
   FlatList,
 } from "react-native";
 import PlanTile from "../components/PlanTile";
+import { getSecureData } from "../utils/SecureStorageService";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
-
+  const { updateUserNameContext } = useContext(UserContext);
   const [plans, setPlans] = useState([]);
-  console.log(plans);
 
+  useEffect(() => {
+    const loadUserName = async () => {
+      try {
+        const userName = await getSecureData("userName");
+
+        if (userName) {
+          updateUserNameContext(userName);
+        } else {
+          console.warn("No userName found in secure storage");
+        }
+      } catch (error) {
+        console.error(
+          "Failed to retrieve userName from secure storage:",
+          error
+        );
+        // Default value provided to prevent crash elsewhere in app
+        updateUserNameContext("Guest");
+      }
+    };
+
+    loadUserName();
+  }, []);
+
+  //Fetches most recent plans from the DB eachtime the screen is navigated to ensuring most recent data is used
   useFocusEffect(
     useCallback(() => {
       const fetchAllApprovedPlans = async () => {
@@ -91,15 +116,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#007BFF", // Button background color
-    paddingVertical: 16, // Button height
-    alignItems: "center", // Center text horizontally
+    backgroundColor: "#007BFF",
+    paddingVertical: 16,
+    alignItems: "center",
     justifyContent: "center",
   },
   buttonText: {
-    color: "#FFFFFF", // Text color
-    fontSize: 18, // Text size
-    fontWeight: "bold", // Text weight
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   noPlansText: {
     textAlign: "center",

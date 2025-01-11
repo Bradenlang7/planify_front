@@ -10,7 +10,6 @@ const ResolveAuthScreen = () => {
 
     // Check if token exists
     if (token) {
-      console.log("Token found:", token);
       try {
         console.log("Sending token to backend for validation...");
         const response = await planifyApi.post("/api/auth/validate-token");
@@ -19,8 +18,6 @@ const ResolveAuthScreen = () => {
         } else {
           navigate("SignIn");
         }
-        console.log("Response Status:", response.status);
-        console.log("Response Data:", response.data);
       } catch (error) {
         console.error(
           "Error during token validation:",
@@ -32,8 +29,6 @@ const ResolveAuthScreen = () => {
       console.log("No token found.");
       navigate("SignIn");
     }
-
-    console.log("Exiting tryLocalSignin.");
   };
 
   useEffect(() => {

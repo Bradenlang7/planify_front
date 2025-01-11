@@ -18,12 +18,18 @@ const authReducer = (state, action) => {
 const signin =
   (dispatch) =>
   async ({ email, password }) => {
+    console.log("Running sign in");
     try {
       const response = await planifyApi.post("/api/auth/login", {
         email,
         password,
       });
+      console.log(
+        "RESPONSE DATA ________________________________________________________"
+      );
+      console.log(response.data);
       await saveSecureData("token", response.data.token);
+      await saveSecureData("userName", response.data.username);
       navigate("MainApp");
     } catch (err) {
       console.log(err);
@@ -38,6 +44,7 @@ const signin =
 const signout = (dispatch) => async () => {
   try {
     await deleteSecureData("token");
+    await deleteSecureData("userName");
     navigate("SignIn");
   } catch (err) {
     console.log(err);
@@ -56,6 +63,7 @@ const signup =
         password,
       });
       await saveSecureData("token", response.data.token);
+      await saveSecureData("userName", response.data.username);
       navigate("MainApp");
     } catch (err) {
       console.log(err);
