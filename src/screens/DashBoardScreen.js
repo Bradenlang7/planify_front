@@ -69,7 +69,10 @@ export default function DashboardScreen() {
   );
 
   const handlePlanPress = (plan) => {
-    navigation.navigate("PlanDetails", { planId: plan.id }); // Navigate to plan details
+    navigation.navigate("PlanFlow", {
+      screen: "PlanDetails",
+      params: { planId: plan.id },
+    });
   };
 
   return (
