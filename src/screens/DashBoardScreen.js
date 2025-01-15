@@ -15,29 +15,10 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
-  const { updateUserNameContext } = useContext(UserContext);
+  const { loadUserName } = useContext(UserContext);
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
-    const loadUserName = async () => {
-      try {
-        const userName = await getSecureData("userName");
-
-        if (userName) {
-          updateUserNameContext(userName);
-        } else {
-          console.warn("No userName found in secure storage");
-        }
-      } catch (error) {
-        console.error(
-          "Failed to retrieve userName from secure storage:",
-          error
-        );
-        // Default value provided to prevent crash elsewhere in app
-        updateUserNameContext("Guest");
-      }
-    };
-
     loadUserName();
   }, []);
 
@@ -94,7 +75,11 @@ export default function DashboardScreen() {
 
       <TouchableOpacity
         style={styles.bannerButton}
-        onPress={() => navigation.navigate("CreatePlan")}
+        onPress={() =>
+          navigation.navigate("PlanFlow", {
+            screen: "CreatePlan",
+          })
+        }
       >
         <Text style={styles.buttonText}>Create Plan!</Text>
       </TouchableOpacity>

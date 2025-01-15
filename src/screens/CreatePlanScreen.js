@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import planifyApi from "../api/planify";
+import { useNavigation } from "@react-navigation/native";
 import {
   Text,
   TextInput,
@@ -40,6 +41,8 @@ export default function CreatePlanScreen() {
   const [endTime, setEndTime] = useState(
     new Date(new Date().getTime() + 60 * 60 * 1000).toISOString() // Default to 1 hour later
   );
+
+  const navigation = useNavigation();
 
   return (
     <KeyboardAvoidingView
@@ -94,10 +97,17 @@ export default function CreatePlanScreen() {
         <TouchableOpacity
           style={styles.submitButton}
           onPress={() =>
-            createPlan({ title, description, location, startTime, endTime })
+            navigation.navigate("AddInvitees", {
+              title,
+              description,
+              location,
+              startTime,
+              endTime,
+              createPlan,
+            })
           }
         >
-          <Text style={styles.submitButtonText}>Submit Plan</Text>
+          <Text style={styles.submitButtonText}>Add Invitees</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
