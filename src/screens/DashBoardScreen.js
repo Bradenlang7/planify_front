@@ -1,25 +1,27 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import planifyApi from "../api/planify";
 import { Context as UserContext } from "../context/UserContext";
+import { Context as FriendshipContext } from "../context/FriendshipsContext";
+
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   FlatList,
 } from "react-native";
 import PlanTile from "../components/PlanTile";
-import { getSecureData } from "../utils/SecureStorageService";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
   const { loadUserName } = useContext(UserContext);
+  const { fetchApprovedFriendships } = useContext(FriendshipContext);
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
     loadUserName();
+    fetchApprovedFriendships();
   }, []);
 
   //Fetches most recent plans from the DB eachtime the screen is navigated to ensuring most recent data is used

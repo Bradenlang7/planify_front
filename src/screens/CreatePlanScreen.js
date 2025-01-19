@@ -21,7 +21,8 @@ export default function CreatePlanScreen() {
     endTime,
   }) => {
     try {
-      await planifyApi.post("/api/plans", {
+      return await planifyApi.post("/api/plans", {
+        //api call returns the new plan Id
         title,
         description,
         location,
@@ -96,16 +97,19 @@ export default function CreatePlanScreen() {
 
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() =>
-            navigation.navigate("AddInvitees", {
+          onPress={async () => {
+            const response = await createPlan({
               title,
               description,
               location,
               startTime,
               endTime,
-              createPlan,
-            })
-          }
+            });
+            const planId = response.data.id;
+            navigation.navigate("AddInvitees", {
+              planId,
+            });
+          }}
         >
           <Text style={styles.submitButtonText}>Add Invitees</Text>
         </TouchableOpacity>

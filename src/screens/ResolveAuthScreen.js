@@ -13,6 +13,7 @@ const ResolveAuthScreen = () => {
       try {
         console.log("Sending token to backend for validation...");
         const response = await planifyApi.post("/api/auth/validate-token");
+        console.log(response.status);
         if (response.status === 200) {
           navigate("MainApp");
         } else {

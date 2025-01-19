@@ -2,7 +2,7 @@ import createDataContext from "./createDataContext";
 import planifyApi from "../api/planify";
 
 //tracks the logged in user's username for use throughout the app
-const userReducer = (state, action) => {
+const friendshipReducer = (state, action) => {
   switch (action.type) {
     case "Set_Approved_Friendships":
       return { ...state, approvedFriendships: action.payload };
@@ -19,7 +19,7 @@ const fetchApprovedFriendships = (dispatch) => async () => {
 
     dispatch({
       type: "Set_Approved_Friendships",
-      payload: approvedFriendships,
+      payload: approvedFriendships.data,
     });
   } catch (err) {
     console.error("Error fetching friendships:", err);
@@ -27,7 +27,7 @@ const fetchApprovedFriendships = (dispatch) => async () => {
 };
 
 export const { Provider, Context } = createDataContext(
-  userReducer,
-  { updateUserNameContext },
-  { userName: "" }
+  friendshipReducer,
+  { fetchApprovedFriendships },
+  { approvedFriendships: [] }
 );
