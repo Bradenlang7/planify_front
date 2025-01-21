@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
+import { startGoogleLogin } from "../utils/startGoogleLogin";
 import {
-  View,
   Text,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   Button,
-  Linking,
 } from "react-native";
 import NavLink from "../components/NavLink";
 import { Context as AuthContext } from "../context/AuthContext";
@@ -15,22 +14,6 @@ import * as AuthSession from "expo-auth-session";
 
 export default function SignInScreen() {
   const { state, signin } = useContext(AuthContext);
-
-  // Google OAuth2 Configuration
-  const discovery = {
-    authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-  };
-
-  const [request, _, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId:
-        "549584527464-gl416mhgoqpf73h9lpqccv8are93trfn.apps.googleusercontent.com",
-      redirectUri: "https://auth.expo.io/@anonymous/planify-front", //Hard coded. NEED TO CHANGE
-      scopes: ["openid", "profile", "email"],
-      responseType: "code",
-    },
-    discovery
-  );
 
   return (
     <KeyboardAvoidingView
@@ -45,7 +28,7 @@ export default function SignInScreen() {
         onSubmit={signin}
         submitButtonText={"Sign in"}
       />
-      <Button title="Sign in with Google" onPress={() => promptAsync()} />
+      <Button title="Sign in with Google" onPress={() => startGoogleLogin()} />
       <NavLink
         text="Dont have an account? Sign up Instead"
         routeName="SignUp"

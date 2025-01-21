@@ -27,7 +27,7 @@ export default function AddInviteesScreen({ route }) {
             `${friend.firstname} ${friend.lastname}`
               .toLowerCase()
               .includes(query.toLowerCase()) &&
-            !selectedFriends.some((selected) => selected.id === friend.id)
+            !selectedFriends.some((selected) => selected.id === friend.id) //prevents suggestion box from including already added friends
         );
 
   const handleSelect = (friend) => {

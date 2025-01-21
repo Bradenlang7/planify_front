@@ -24,9 +24,6 @@ const signin =
         email,
         password,
       });
-      console.log(
-        "RESPONSE DATA ________________________________________________________"
-      );
       console.log(response.data);
       await saveSecureData("token", response.data.token);
       await saveSecureData("userName", response.data.username);
@@ -62,6 +59,8 @@ const signup =
         email,
         password,
       });
+      console.log(response.data.token);
+      console.log(response.data.username);
       await saveSecureData("token", response.data.token);
       await saveSecureData("userName", response.data.username);
       navigate("MainApp");

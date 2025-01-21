@@ -1,6 +1,5 @@
 {
   "expo": {
-    "scheme": "myapp",
     "name": "planify-front",
     "slug": "planify-front",
     "version": "1.0.0",

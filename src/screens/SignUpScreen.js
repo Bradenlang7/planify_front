@@ -26,7 +26,7 @@ export default function SignUpScreen() {
           headerText={"Sign up"}
           errorMessage={state.errorMessage}
           onSubmit={signup}
-          submitButtonText={"Sign in"}
+          submitButtonText={"Sign Up!"}
         />
       </ScrollView>
     </KeyboardAvoidingView>
