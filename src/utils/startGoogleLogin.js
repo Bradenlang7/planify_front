@@ -1,5 +1,4 @@
 import * as WebBrowser from "expo-web-browser";
-import * as Linking from "expo-linking";
 import { saveSecureData } from "../utils/SecureStorageService";
 import { navigate } from "../../navigationRef";
 
