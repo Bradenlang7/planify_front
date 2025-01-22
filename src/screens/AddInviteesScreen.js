@@ -7,23 +7,24 @@ import {
   FlatList,
 } from "react-native";
 import Autocomplete from "react-native-autocomplete-input";
-import { Context as FriendshipContext } from "../context/FriendshipsContext";
 import { useNavigation } from "@react-navigation/native";
 import planifyApi from "../api/planify";
+import { useApprovedFriendships } from "../hooks/useApprovedFriendships";
 
 export default function AddInviteesScreen({ route }) {
   const navigation = useNavigation();
-  const { state } = useContext(FriendshipContext);
   const { planObject } = route.params;
 
   const [query, setQuery] = useState("");
   const [selectedFriends, setSelectedFriends] = useState([]);
-  console.log(state.approvedFriendships);
+
+  const { data: approvedFriendships } = useApprovedFriendships();
+  console.log("Approved Friendships" + approvedFriendships);
   // Filter approved friends based on query and exclude already selected ones
   const filteredFriends =
     query === ""
       ? []
-      : state.approvedFriendships.filter(
+      : approvedFriendships.filter(
           (friend) =>
             `${friend.firstname} ${friend.lastname}`
               .toLowerCase()

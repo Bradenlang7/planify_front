@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import planifyApi from "../api/planify";
-import { Context as UserContext } from "../context/UserContext";
-import { Context as FriendshipContext } from "../context/FriendshipsContext";
+import { useApprovedPlans } from "../hooks/useApprovedPlans";
 
 import {
   View,
@@ -11,45 +9,12 @@ import {
   FlatList,
 } from "react-native";
 import PlanTile from "../components/PlanTile";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
-  const { loadUserName } = useContext(UserContext);
-  const { fetchApprovedFriendships } = useContext(FriendshipContext);
-  const [plans, setPlans] = useState([]);
 
-  useEffect(() => {
-    loadUserName();
-    fetchApprovedFriendships();
-  }, []);
-
-  //Fetches most recent plans from the DB eachtime the screen is navigated to ensuring most recent data is used
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllApprovedPlans = async () => {
-        try {
-          const status = "APPROVED";
-          const includeOwner = true;
-
-          const response = await planifyApi.get(
-            `/api/approvals/users/status/${status}`,
-            {
-              params: {
-                includeOwner, // Required by the backend endpoint
-              },
-            }
-          );
-
-          setPlans(response.data);
-        } catch (err) {
-          console.error("Error fetching plans:", err);
-        }
-      };
-
-      fetchAllApprovedPlans();
-    }, [])
-  );
+  const { data: approvedPlans = [] } = useApprovedPlans(); // fetch users plans from the
 
   const handlePlanPress = (plan) => {
     navigation.navigate("PlanFlow", {
@@ -58,12 +23,20 @@ export default function DashboardScreen() {
     });
   };
 
+  useEffect(() => {
+    console.log("Screen Mounted");
+
+    return () => {
+      console.log("Screen Unmounted");
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Dashboard</Text>
-      {plans.length > 0 ? (
+      {approvedPlans.length > 0 ? (
         <FlatList
-          data={plans}
+          data={approvedPlans}
           keyExtractor={(item) => item.id.toString()}
           numColumns={3} // Display 3 squares per row
           renderItem={({ item }) => (

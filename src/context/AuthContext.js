@@ -27,7 +27,7 @@ const signin =
       console.log(response.data);
       await saveSecureData("token", response.data.token);
       await saveSecureData("userName", response.data.username);
-      navigate("MainApp");
+      navigate("ResolveSessionScreen");
     } catch (err) {
       console.log(err);
       dispatch({
@@ -63,7 +63,7 @@ const signup =
       console.log(response.data.username);
       await saveSecureData("token", response.data.token);
       await saveSecureData("userName", response.data.username);
-      navigate("MainApp");
+      navigate("ResolveSessionScreen");
     } catch (err) {
       console.log(err);
       dispatch({

@@ -47,17 +47,6 @@ export default function DrawerNavigator() {
           title: "Dashboard",
           drawerLabel: "Dashboard",
         }}
-        listeners={({ navigation }) => ({
-          drawerItemPress: (e) => {
-            e.preventDefault(); // Prevent default drawer behavior
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0, // Reset stack to the first screen
-                routes: [{ name: "DashboardFlow" }],
-              })
-            );
-          },
-        })}
       />
 
       {/* Other drawer screens */}

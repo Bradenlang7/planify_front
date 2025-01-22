@@ -13,7 +13,6 @@ export async function getSecureData(key) {
   try {
     const value = await SecureStore.getItemAsync(key);
     if (value) {
-      console.log(`${key} retrieved successfully:`, value);
       return value;
     } else {
       console.log(`${key} not found`);

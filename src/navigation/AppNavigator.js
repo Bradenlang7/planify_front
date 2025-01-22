@@ -3,11 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import CreatePlanScreen from "../screens/CreatePlanScreen";
 import PlanFlow from "./PlanFlow";
 import DrawerNavigator from "./DrawerNavigator";
 import ResolveAuthScreen from "../screens/ResolveAuthScreen";
 import { navigationRef } from "../../navigationRef";
+import ResolveSessionScreen from "../screens/ResolveSessionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +18,12 @@ export default function AppNavigator() {
         <Stack.Screen
           name="ResolveAuthScreen"
           component={ResolveAuthScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="ResolveSessionScreen"
+          component={ResolveSessionScreen}
           options={{ headerShown: false }}
         />
 
