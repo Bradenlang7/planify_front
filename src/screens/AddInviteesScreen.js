@@ -9,11 +9,12 @@ import {
 import Autocomplete from "react-native-autocomplete-input";
 import { Context as FriendshipContext } from "../context/FriendshipsContext";
 import { useNavigation } from "@react-navigation/native";
+import planifyApi from "../api/planify";
 
 export default function AddInviteesScreen({ route }) {
   const navigation = useNavigation();
   const { state } = useContext(FriendshipContext);
-  const { planId } = route.params;
+  const { planObject } = route.params;
 
   const [query, setQuery] = useState("");
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -43,17 +44,18 @@ export default function AddInviteesScreen({ route }) {
 
   const handleSubmit = async () => {
     try {
-      // Send the selectedFriends array to the backend
-      const friendIds = selectedFriends.map((friend) => friend.id); // Extract friend IDs
-      console.log("Sending to backend:", { planId, invitees: friendIds });
-
-      // Replace with actual API call
-      await planifyApi.post(`/api/plans/${planId}/invitees`, {
+      const friendIds = selectedFriends.map((friend) => friend.id);
+      console.log("Sending to backend:", {
+        ...planObject,
         invitees: friendIds,
       });
 
-      // Navigate back or show a success message
-      navigation.goBack();
+      await planifyApi.post(`/api/plans`, {
+        ...planObject,
+        invitees: friendIds,
+      });
+
+      navigation.navigate("MainApp");
     } catch (err) {
       console.error("Error sending invitees:", err);
     }
@@ -62,7 +64,6 @@ export default function AddInviteesScreen({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Invitees</Text>
-      <Text style={styles.subtitle}>Plan ID: {planId}</Text>
 
       {/* Autocomplete Dropdown */}
       <Autocomplete
@@ -82,7 +83,6 @@ export default function AddInviteesScreen({ route }) {
         }}
       />
 
-      {/* Selected Friends List */}
       <Text style={styles.subtitle}>Selected Friends:</Text>
       <FlatList
         data={selectedFriends}
@@ -101,7 +101,7 @@ export default function AddInviteesScreen({ route }) {
 
       {/* Submit Button */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Send Invites</Text>
+        <Text style={styles.submitButtonText}>Create Plan!</Text>
       </TouchableOpacity>
     </View>
   );

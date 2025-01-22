@@ -77,7 +77,11 @@ export default function DashboardScreen() {
 
       <TouchableOpacity
         style={styles.bannerButton}
-        onPress={() => navigation.navigate("PlanFlow")}
+        onPress={() =>
+          navigation.navigate("PlanFlow", {
+            screen: "CreatePlan",
+          })
+        }
       >
         <Text style={styles.buttonText}>Create Plan!</Text>
       </TouchableOpacity>

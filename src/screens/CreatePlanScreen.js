@@ -12,26 +12,22 @@ import {
 } from "react-native";
 
 export default function CreatePlanScreen() {
-  //method makes api call to create a plan in the db
-  const createPlan = async ({
+  //Function creates and initial plan object to be sent to the server in AddInviteesScreen
+  const createPlanObject = (
     title,
     description,
     location,
     startTime,
-    endTime,
-  }) => {
-    try {
-      return await planifyApi.post("/api/plans", {
-        //api call returns the new plan Id
-        title,
-        description,
-        location,
-        startTime,
-        endTime,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    endTime
+  ) => {
+    return {
+      title,
+      description,
+      location,
+      startTime,
+      endTime,
+      invitees: [], //to be populated in AddInviteesScreen
+    };
   };
 
   // Initialize with the current date and time in ISO 8601 format for testing
@@ -97,17 +93,16 @@ export default function CreatePlanScreen() {
 
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={async () => {
-            const response = await createPlan({
+          onPress={() => {
+            const planObject = createPlanObject(
               title,
               description,
               location,
               startTime,
-              endTime,
-            });
-            const planId = response.data.id;
+              endTime
+            );
             navigation.navigate("AddInvitees", {
-              planId,
+              planObject,
             });
           }}
         >
