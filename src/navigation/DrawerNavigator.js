@@ -7,7 +7,7 @@ import CreatePlanScreen from "../screens/CreatePlanScreen";
 import PlanDetailsScreen from "../screens/PlanDetailsScreen";
 import FriendsScreen from "../screens/FriendsScreen";
 import AccountScreen from "../screens/AccountScreen";
-import AddInviteesScreen from "../screens/AddInviteesScreen";
+import EditPlansScreen from "../screens/EditPlansScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -36,10 +36,8 @@ export default function DrawerNavigator() {
       initialRouteName="DashboardFlow"
       screenOptions={({ route }) => ({
         headerShown: true,
-        //swipeEdgeWidth: route.name === "PlanFlow" ? 0 : 30,
       })}
     >
-      {/* DashboardFlow */}
       <Drawer.Screen
         name="DashboardFlow"
         component={DashboardFlow}
@@ -49,7 +47,7 @@ export default function DrawerNavigator() {
         }}
       />
 
-      {/* Other drawer screens */}
+      <Drawer.Screen name="Edit Plans" component={EditPlansScreen} />
       <Drawer.Screen name="Friends" component={FriendsScreen} />
       <Drawer.Screen name="Account" component={AccountScreen} />
     </Drawer.Navigator>

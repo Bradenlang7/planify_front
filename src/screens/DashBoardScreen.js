@@ -1,15 +1,9 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import { useApprovedPlans } from "../hooks/useApprovedPlans";
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
-import PlanTile from "../components/PlanTile";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import PlanList from "../components/PlanList";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
@@ -23,30 +17,13 @@ export default function DashboardScreen() {
     });
   };
 
-  useEffect(() => {
-    console.log("Screen Mounted");
-
-    return () => {
-      console.log("Screen Unmounted");
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
-      {approvedPlans.length > 0 ? (
-        <FlatList
-          data={approvedPlans}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={3} // Display 3 squares per row
-          renderItem={({ item }) => (
-            <PlanTile plan={item} onPress={handlePlanPress} />
-          )}
-          contentContainerStyle={styles.calendarGrid}
-        />
-      ) : (
-        <Text style={styles.noPlansText}>No plans available</Text>
-      )}
+      <PlanList
+        headerText={"Upcoming Plans"}
+        planArray={approvedPlans}
+        handlePlanPress={handlePlanPress}
+      />
 
       <TouchableOpacity
         style={styles.bannerButton}
@@ -67,13 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-  },
-  calendarGrid: {
-    alignItems: "center",
-  },
+
   bannerButton: {
     position: "absolute",
     bottom: 0,
@@ -88,11 +59,5 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "bold",
-  },
-  noPlansText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#666",
-    marginTop: 16,
   },
 });

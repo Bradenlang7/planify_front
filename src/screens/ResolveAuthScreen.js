@@ -15,7 +15,7 @@ const ResolveAuthScreen = () => {
         const response = await planifyApi.post("/api/auth/validate-token");
         console.log(response.status);
         if (response.status === 200) {
-          navigate("MainApp");
+          navigate("ResolveSessionScreen");
         } else {
           navigate("SignIn");
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../context/UserContext";
+import { Context as UserContext } from "../context/UserContext";
 import { useApprovedFriendships } from "../hooks/useApprovedFriendships";
 
 const SessionLoaderScreen = () => {

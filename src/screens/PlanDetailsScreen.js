@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from "react";
 import planifyApi from "../api/planify";
 import CommentWindow from "../components/CommentWindow";
+import fetchPlanDetails from "../api/plans/fetchPlanDetails";
+import postComments from "../api/comments/postComments";
+import deleteComments from "../api/comments/deleteComments";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   View,
@@ -23,35 +26,31 @@ export default function PlanDetailsScreen({ route, navigation }) {
   //useFocusEffect fetches initial plan info from the DB.
   useFocusEffect(
     useCallback(() => {
-      const fetchPlanDetails = async () => {
+      const loadPlanDetails = async () => {
         try {
-          const response = await planifyApi.get(`/api/plans/${planId}/details`);
-          setComments(response.data.comments);
-          setPlan(response.data);
-        } catch (err) {
-          console.error("Error fetching plan:", err);
+          const planData = await fetchPlanDetails(planId);
+          setPlan(planData);
+        } catch (error) {
+          console.error("Error fetching plan details:", error);
         }
       };
 
-      fetchPlanDetails();
-    }, [])
+      loadPlanDetails();
+    }, [planId])
   );
 
-  async function postComments(comment) {
+  async function updateComments(comments) {
     try {
-      const response = await planifyApi.post(`/api/comments`, {
-        planId,
-        content: comment,
-      });
+      const response = await postComments(comments, planId);
       setComments((prevComments) => [...prevComments, response.data]);
     } catch (err) {
-      console.error("Error fetching plan:", err);
+      console.error("Error posting comments:", err);
     }
   }
 
-  async function deleteComment(commentId) {
+  async function revmoveComment(commentId) {
     try {
-      const response = await planifyApi.delete(`/api/comments/${commentId}`);
+      const response = deleteComments();
       if (response.status === 200) {
         // Remove the deleted comment from the state if backend delete successful
         setComments((prevComments) =>
@@ -101,7 +100,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
         <View style={styles.commentWindowContainer}>
           <CommentWindow
             comments={comments}
-            postCommentsFunction={postComments}
+            postCommentsFunction={updateComments}
             deleteCommentFunction={deleteComment}
           />
         </View>
