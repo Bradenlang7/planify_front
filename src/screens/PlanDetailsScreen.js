@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
-import planifyApi from "../api/planify";
+import React, { useState, useCallback, useEffect } from "react";
+import { createWebSocketClient } from "../websockets/createWebSocketClient";
 import CommentWindow from "../components/CommentWindow";
 import fetchPlanDetails from "../api/plans/fetchPlanDetails";
 import postComments from "../api/comments/postComments";
 import deleteComments from "../api/comments/deleteComments";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import getSecureData from "../utils/SecureStorageService";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -22,7 +23,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
   const [plan, setPlan] = useState({});
   const [showComments, setShowComments] = useState(false); // Manage visibility of CommentWindow
   const [comments, setComments] = useState([]);
-
+  console.log("PLAN: ", plan.data);
   //useFocusEffect fetches initial plan info from the DB.
   useFocusEffect(
     useCallback(() => {
@@ -30,6 +31,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
         try {
           const planData = await fetchPlanDetails(planId);
           setPlan(planData);
+          setComments(planData.data.comments);
         } catch (error) {
           console.error("Error fetching plan details:", error);
         }
@@ -39,29 +41,66 @@ export default function PlanDetailsScreen({ route, navigation }) {
     }, [planId])
   );
 
-  async function updateComments(comments) {
+  useEffect(() => {
+    let client;
+    (async () => {
+      client = await createWebSocketClient({
+        brokerURL: "http://192.168.0.100:8080/ws",
+        topic: `/topic/comments/${planId}`,
+        onMessage: (message) => {
+          const { action, data } = message;
+
+          switch (action) {
+            case "add":
+              console.log("Message data", data);
+              setComments((prevComments) => [...prevComments, data]);
+              break;
+
+            case "delete":
+              setComments((prevComments) =>
+                prevComments.filter((comment) => comment.id !== data.id)
+              );
+              break;
+
+            default:
+              console.warn(`Unknown action type: ${action}`);
+          }
+        },
+      });
+    })();
+
+    return () => {
+      if (client) {
+        client.deactivate();
+        console.log("WebSocket connection deactivated");
+      }
+    };
+  }, [planId]);
+
+  async function addComment(comments) {
     try {
-      const response = await postComments(comments, planId);
-      setComments((prevComments) => [...prevComments, response.data]);
+      await postComments(comments, planId);
     } catch (err) {
       console.error("Error posting comments:", err);
     }
   }
 
-  async function revmoveComment(commentId) {
+  async function removeComment(commentId) {
     try {
-      const response = deleteComments();
-      if (response.status === 200) {
-        // Remove the deleted comment from the state if backend delete successful
-        setComments((prevComments) =>
-          prevComments.filter((comment) => comment.id !== commentId)
-        );
-      }
+      await deleteComments();
     } catch (err) {
       console.error("Error deleting comment:", err);
     }
   }
 
+  if (!plan || !plan.data) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+  console.log(plan);
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -73,15 +112,17 @@ export default function PlanDetailsScreen({ route, navigation }) {
         accessible={false} // Ensure accessibility is not interrupted
       >
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <Text style={styles.title}>{plan.title}</Text>
-          <Text style={styles.date}>Date: {plan.startTime}</Text>
-          <Text style={styles.description}>{plan.description}</Text>
+          <Text style={styles.title}>{plan.data.title}</Text>
+          <Text style={styles.date}>Date: {plan.data.startTime}</Text>
+          <Text style={styles.description}>{plan.data.description}</Text>
 
           {plan.location && (
-            <Text style={styles.details}>Location: {plan.location}</Text>
+            <Text style={styles.details}>Location: {plan.data.location}</Text>
           )}
           {plan.owner && (
-            <Text style={styles.details}>Owner: {plan.owner.username}</Text>
+            <Text style={styles.details}>
+              Owner: {plan.data.owner.username}
+            </Text>
           )}
 
           {/* Comment Button */}
@@ -100,8 +141,8 @@ export default function PlanDetailsScreen({ route, navigation }) {
         <View style={styles.commentWindowContainer}>
           <CommentWindow
             comments={comments}
-            postCommentsFunction={updateComments}
-            deleteCommentFunction={deleteComment}
+            postCommentsFunction={addComment}
+            deleteCommentFunction={removeComment}
           />
         </View>
       )}

@@ -13,6 +13,7 @@ export async function getSecureData(key) {
   try {
     const value = await SecureStore.getItemAsync(key);
     if (value) {
+      console.log("Found Token" + value);
       return value;
     } else {
       console.log(`${key} not found`);
