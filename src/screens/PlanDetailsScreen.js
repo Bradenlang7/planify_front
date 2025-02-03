@@ -53,7 +53,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
           switch (action) {
             case "add":
               console.log("Message data", data);
-              setComments((prevComments) => [...prevComments, data]);
+              setComments((prevComments) => [data, ...prevComments]);
               break;
 
             case "delete":

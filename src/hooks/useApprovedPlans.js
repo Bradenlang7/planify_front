@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import planifyApi from "../api/planify";
+import plannrApi from "../api/plannr";
 
 const fetchApprovedPlans = async () => {
   console.log("FETCHINNG APPROVED PLANS");
   const status = "APPROVED";
   const includeOwner = true;
   try {
-    const response = await planifyApi.get(
+    const response = await plannrApi.get(
       `/api/approvals/users/status/${status}`,
       {
         params: {

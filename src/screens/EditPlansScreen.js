@@ -26,8 +26,9 @@ export default function EditPlansScreen() {
   console.log(filteredArray);
 
   const handlePlanPress = (plan) => {
+    console.log("HANDLE PRESS PLAN ", plan.id);
     navigation.navigate("PlanFlow", {
-      screen: "PlanDetails",
+      screen: "CreatePlan",
       params: { planId: plan.id },
     });
   };

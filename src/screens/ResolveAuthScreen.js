@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { navigate } from "../../navigationRef";
-import planifyApi from "../api/planify";
+import plannrApi from "../api/plannr";
 import { getSecureData } from "../utils/SecureStorageService";
 //Screen attempts to sign in and navigate to MainAppScreen using JWT
 const ResolveAuthScreen = () => {
@@ -12,7 +12,7 @@ const ResolveAuthScreen = () => {
     if (token) {
       try {
         console.log("Sending token to backend for validation...");
-        const response = await planifyApi.post("/api/auth/validate-token");
+        const response = await plannrApi.post("/api/auth/validate-token");
         console.log(response.status);
         if (response.status === 200) {
           navigate("ResolveSessionScreen");

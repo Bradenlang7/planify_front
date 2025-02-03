@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "planify-front",
-    "slug": "planify-front",
+    "name": "plannr",
+    "slug": "plannr",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

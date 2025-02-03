@@ -1,10 +1,10 @@
-import planifyApi from "../api/planify";
+import plannrApi from "../api/plannr";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchApprovedFriendships = async () => {
   try {
     console.log("Fetching APPROVED FRIENDSHIPS");
-    const response = await planifyApi.get(
+    const response = await plannrApi.get(
       `/api/friendships/status/${"APPROVED"}`
     );
     return response.data; // Ensure this returns valid data

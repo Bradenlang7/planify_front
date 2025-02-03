@@ -1,8 +1,8 @@
-import planifyApi from "../planify";
+import plannrApi from "../plannr";
 
 async function postComments(comment, planId) {
   try {
-    const response = await planifyApi.post(`/api/comments`, {
+    const response = await plannrApi.post(`/api/comments`, {
       planId,
       content: comment,
     });

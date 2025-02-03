@@ -1,8 +1,8 @@
-import planifyApi from "../planify";
+import plannrApi from "../plannr";
 
 async function deleteComments(commentId) {
   try {
-    const response = await planifyApi.delete(`/api/comments/${commentId}`);
+    const response = await plannrApi.delete(`/api/comments/${commentId}`);
 
     return response;
   } catch (err) {

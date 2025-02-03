@@ -1,4 +1,4 @@
-<p><strong>Planify</strong> is an interactive calendar application designed to simplify event planning and sharing among friends. Unlike traditional calendars, Planify fosters real-time collaboration and a seamless social experience. Users will be able to create, share, and manage plans interactively, ensuring a collaborative and engaging way to organize their schedules.</p>
+<p><strong>Plannr</strong> is an interactive calendar application designed to simplify event planning and sharing among friends. Unlike traditional calendars, Plannr fosters real-time collaboration and a seamless social experience. Users will be able to create, share, and manage plans interactively, ensuring a collaborative and engaging way to organize their schedules.</p>
 
 <h2>Technologies Used</h2>
 <ul>

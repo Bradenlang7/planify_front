@@ -1,5 +1,5 @@
 import createDataContext from "./createDataContext";
-import planifyApi from "../api/planify";
+import plannrApi from "../api/plannr";
 import { navigate } from "../../navigationRef";
 import {
   saveSecureData,
@@ -20,7 +20,7 @@ const signin =
   async ({ email, password }) => {
     console.log("Running sign in");
     try {
-      const response = await planifyApi.post("/api/auth/login", {
+      const response = await plannrApi.post("/api/auth/login", {
         email,
         password,
       });
@@ -52,7 +52,7 @@ const signup =
   (dispatch) =>
   async ({ firstname, lastname, username, email, password }) => {
     try {
-      const response = await planifyApi.post("/api/users", {
+      const response = await plannrApi.post("/api/users", {
         firstname,
         lastname,
         username,

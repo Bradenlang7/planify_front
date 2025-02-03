@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Autocomplete from "react-native-autocomplete-input";
 import { useNavigation } from "@react-navigation/native";
-import planifyApi from "../api/planify";
+import plannrApi from "../api/plannr";
 import { useApprovedFriendships } from "../hooks/useApprovedFriendships";
 
 export default function AddInviteesScreen({ route }) {
@@ -51,7 +51,7 @@ export default function AddInviteesScreen({ route }) {
         invitees: friendIds,
       });
 
-      await planifyApi.post(`/api/plans`, {
+      await plannrApi.post(`/api/plans`, {
         ...planObject,
         invitees: friendIds,
       });
