@@ -1,15 +1,14 @@
 import React, { useState, useContext } from "react";
-import { useOwnedPlans } from "../hooks/useOwnedPlans";
-import { queryClient } from "../utils/QueryClient";
+import { useApprovedPlans } from "../hooks/useApprovedPlans";
 import { View, Text, StyleSheet, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import PlanList from "../components/PlanList";
 import { Context as UserContext } from "../context/UserContext";
 
 export default function EditPlansScreen() {
   const navigation = useNavigation();
   const [showOwnedPlans, setShowOwnedPlans] = useState(true);
-  const approvedPlans = queryClient.getQueryData(["approvedPlans"]);
+  const { data: approvedPlans } = useApprovedPlans();
   const { state } = useContext(UserContext);
   const userName = state.userName;
   const headerText = showOwnedPlans ? "Owned Plans" : "Approved Plans";
@@ -26,7 +25,6 @@ export default function EditPlansScreen() {
   console.log(filteredArray);
 
   const handlePlanPress = (plan) => {
-    console.log("HANDLE PRESS PLAN ", plan.id);
     navigation.navigate("PlanFlow", {
       screen: "CreatePlan",
       params: { planId: plan.id },

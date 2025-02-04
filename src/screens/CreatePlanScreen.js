@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import fetchPlanDetails from "../api/plans/fetchPlanDetails";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import deletePlan from "../api/plans/deletePlan";
+import DeleteButton from "../components/DeleteButton";
+import SubmitButton from "../components/SubmitButton";
 import {
   Text,
   TextInput,
@@ -10,6 +13,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import { queryClient } from "../utils/QueryClient";
 
 export default function CreatePlanScreen({ route }) {
   const { planId = null } = route.params || {};
@@ -50,7 +54,7 @@ export default function CreatePlanScreen({ route }) {
       try {
         const response = await fetchPlanDetails(planId);
         const plan = response.data;
-
+        console.log(plan);
         setTitle(plan.title);
         setDescription(plan.description);
         setLocation(plan.location);
@@ -65,6 +69,16 @@ export default function CreatePlanScreen({ route }) {
   }, [planId]);
 
   const navigation = useNavigation();
+
+  //function to handle the delete button press.
+  const handleDelete = async () => {
+    try {
+      await deletePlan(planId);
+      queryClient.invalidateQueries(["approvedPlans"]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -112,17 +126,13 @@ export default function CreatePlanScreen({ route }) {
         />
         {planId ? (
           // Show DELETE button if planId exists
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => console.log("Delete plan")}
-          >
-            <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
+          <DeleteButton
+            onPressFunction={handleDelete}
+            navRoute={"EditPlansScreen"}
+          />
         ) : (
-          // Show ADD INVITEES button if planId is missing (i.e. from EditPlansScreen)
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={() => {
+          <SubmitButton
+            onPressFunction={() => {
               const planObject = {
                 title,
                 description,
@@ -132,9 +142,7 @@ export default function CreatePlanScreen({ route }) {
               };
               navigation.navigate("AddInvitees", { planObject });
             }}
-          >
-            <Text style={styles.buttonText}>Add Invitees</Text>
-          </TouchableOpacity>
+          />
         )}
       </ScrollView>
     </KeyboardAvoidingView>
@@ -157,12 +165,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontWeight: "bold",
   },
-  deleteButton: {
-    backgroundColor: "red",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
+
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -176,11 +179,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
   },
-  submitButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+
   buttonText: {
     color: "white",
     fontSize: 16,
