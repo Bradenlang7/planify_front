@@ -29,7 +29,7 @@ export default function DashboardScreen() {
         style={styles.bannerButton}
         onPress={() =>
           navigation.navigate("PlanFlow", {
-            screen: "CreatePlan",
+            screen: "EditSinglePlanScreen",
           })
         }
       >

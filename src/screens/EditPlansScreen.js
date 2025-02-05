@@ -26,7 +26,7 @@ export default function EditPlansScreen() {
 
   const handlePlanPress = (plan) => {
     navigation.navigate("PlanFlow", {
-      screen: "CreatePlan",
+      screen: "EditSinglePlanScreen",
       params: { planId: plan.id },
     });
   };

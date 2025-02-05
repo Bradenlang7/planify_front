@@ -46,10 +46,6 @@ export default function AddInviteesScreen({ route }) {
   const handleSubmit = async () => {
     try {
       const friendIds = selectedFriends.map((friend) => friend.id);
-      console.log("Sending to backend:", {
-        ...planObject,
-        invitees: friendIds,
-      });
 
       await plannrApi.post(`/api/plans`, {
         ...planObject,

@@ -49,7 +49,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
         topic: `/topic/comments/${planId}`,
         onMessage: (message) => {
           const { action, data } = message;
-
+          //Server sends action in message response.
           switch (action) {
             case "add":
               console.log("Message data", data);
@@ -58,7 +58,7 @@ export default function PlanDetailsScreen({ route, navigation }) {
 
             case "delete":
               setComments((prevComments) =>
-                prevComments.filter((comment) => comment.id !== data.id)
+                prevComments.filter((comment) => comment.id !== data)
               );
               break;
 
@@ -87,7 +87,8 @@ export default function PlanDetailsScreen({ route, navigation }) {
 
   async function removeComment(commentId) {
     try {
-      await deleteComments();
+      //Require planId arg for the server logic
+      await deleteComments(commentId, planId);
     } catch (err) {
       console.error("Error deleting comment:", err);
     }

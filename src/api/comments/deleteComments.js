@@ -1,8 +1,10 @@
 import plannrApi from "../plannr";
 
-async function deleteComments(commentId) {
+async function deleteComments(commentId, planId) {
   try {
-    const response = await plannrApi.delete(`/api/comments/${commentId}`);
+    const response = await plannrApi.delete(
+      `/api/comments/${commentId}/${planId}`
+    );
 
     return response;
   } catch (err) {

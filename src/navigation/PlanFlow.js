@@ -1,5 +1,5 @@
 import React from "react";
-import CreatePlanScreen from "../screens/CreatePlanScreen";
+import EditSinglePlanScreen from "../screens/EditSinglePlanScreen";
 import PlanDetailsScreen from "../screens/PlanDetailsScreen";
 import AddInviteesScreen from "../screens/AddInviteesScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -18,8 +18,8 @@ function PlanFlow() {
         }}
       />
       <Stack.Screen
-        name="CreatePlan"
-        component={CreatePlanScreen}
+        name="EditSinglePlanScreen"
+        component={EditSinglePlanScreen}
         options={{
           title: "Create Plan",
           gestureEnabled: true,

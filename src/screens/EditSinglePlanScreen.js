@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import fetchPlanDetails from "../api/plans/fetchPlanDetails";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import deletePlan from "../api/plans/deletePlan";
 import DeleteButton from "../components/DeleteButton";
 import SubmitButton from "../components/SubmitButton";
@@ -8,35 +8,14 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
 } from "react-native";
 import { queryClient } from "../utils/QueryClient";
 
-export default function CreatePlanScreen({ route }) {
+export default function EditSinglePlanScreen({ route }) {
   const { planId = null } = route.params || {};
-
-  //Function creates and initial plan object to be sent to the server in AddInviteesScreen
-  const createPlanObject = (
-    title,
-    description,
-    location,
-    startTime,
-    endTime
-  ) => {
-    return {
-      title,
-      description,
-      location,
-      startTime,
-      endTime,
-      invitees: [], //to be populated in AddInviteesScreen
-    };
-  };
-
-  console.log("Create Plans Screen Plan ID ", planId);
 
   // Initialize with the current date and time in ISO 8601 format for testing
   const [title, setTitle] = useState();

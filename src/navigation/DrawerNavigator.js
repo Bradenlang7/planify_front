@@ -3,7 +3,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CommonActions } from "@react-navigation/native";
 import DashboardScreen from "../screens/DashBoardScreen";
-import CreatePlanScreen from "../screens/CreatePlanScreen";
+import EditSinglePlanScreen from "../screens/EditSinglePlanScreen";
 import PlanDetailsScreen from "../screens/PlanDetailsScreen";
 import FriendsScreen from "../screens/FriendsScreen";
 import AccountScreen from "../screens/AccountScreen";
