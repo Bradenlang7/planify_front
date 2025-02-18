@@ -17,6 +17,8 @@ import { queryClient } from "../utils/QueryClient";
 export default function EditSinglePlanScreen({ route }) {
   const { planId = null } = route.params || {};
 
+  const headerTitle = route?.params?.title || "Create Plan"; //if coming from EditPlansScreen title is set to "Edit Plan"
+
   // Initialize with the current date and time in ISO 8601 format for testing
   const [title, setTitle] = useState();
   const [description, setDescription] = useState("");
@@ -25,6 +27,7 @@ export default function EditSinglePlanScreen({ route }) {
   const [endTime, setEndTime] = useState(
     new Date(new Date().getTime() + 60 * 60 * 1000).toISOString() // Default to 1 hour later
   );
+  const [invitees, setInvitees] = useState(null);
 
   useEffect(() => {
     if (!planId) return;
@@ -39,6 +42,7 @@ export default function EditSinglePlanScreen({ route }) {
         setLocation(plan.location);
         setStartTime(plan.startTime);
         setEndTime(plan.endTime);
+        setInvitees(plan.approvals);
       } catch (error) {
         console.error("Failed to fetch plan details:", error);
       }
@@ -66,7 +70,7 @@ export default function EditSinglePlanScreen({ route }) {
       keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
       <ScrollView contentContainerStyle={styles.form}>
-        <Text style={styles.title}>Create Plan</Text>
+        <Text style={styles.title}>{headerTitle}</Text>
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.input}
@@ -104,11 +108,29 @@ export default function EditSinglePlanScreen({ route }) {
           placeholder="Enter end time (e.g., 2024-12-22T17:00)"
         />
         {planId ? (
-          // Show DELETE button if planId exists
-          <DeleteButton
-            onPressFunction={handleDelete}
-            navRoute={"EditPlansScreen"}
-          />
+          <>
+            <DeleteButton
+              onPressFunction={handleDelete}
+              navRoute={"EditPlansScreen"}
+            />
+            <SubmitButton
+              onPressFunction={() => {
+                const planObject = {
+                  title,
+                  description,
+                  location,
+                  startTime,
+                  endTime,
+                  invitees,
+                };
+                navigation.navigate("AddInvitees", {
+                  planObject,
+                  buttonTxt: "Edit Invitees",
+                });
+              }}
+              text="Edit Invitees"
+            />
+          </>
         ) : (
           <SubmitButton
             onPressFunction={() => {
@@ -119,8 +141,12 @@ export default function EditSinglePlanScreen({ route }) {
                 startTime,
                 endTime,
               };
-              navigation.navigate("AddInvitees", { planObject });
+              navigation.navigate("AddInvitees", {
+                planObject,
+                buttonText: "Save Plan!",
+              });
             }}
+            text="Add Invitees"
           />
         )}
       </ScrollView>

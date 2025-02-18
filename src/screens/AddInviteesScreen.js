@@ -10,11 +10,12 @@ import Autocomplete from "react-native-autocomplete-input";
 import { useNavigation } from "@react-navigation/native";
 import plannrApi from "../api/plannr";
 import { useApprovedFriendships } from "../hooks/useApprovedFriendships";
+import InviteesList from "../components/InviteesList";
 
-export default function AddInviteesScreen({ route }) {
+export default function AddInviteesScreen({ route, buttonTxt }) {
   const navigation = useNavigation();
   const { planObject } = route.params;
-
+  console.log("PLAN OBJECT", planObject);
   const [query, setQuery] = useState("");
   const [selectedFriends, setSelectedFriends] = useState([]);
 
@@ -95,10 +96,11 @@ export default function AddInviteesScreen({ route }) {
           </View>
         )}
       />
+      {planObject.invitees && <InviteesList invitees={planObject.invitees} />}
 
       {/* Submit Button */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Create Plan!</Text>
+        <Text style={styles.submitButtonText}>{route.params.buttonTxt}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -3,7 +3,7 @@ import { saveSecureData } from "../utils/SecureStorageService";
 import { navigate } from "../../navigationRef";
 
 const BACKEND_OAUTH_URL =
-  "https://4285-70-176-250-188.ngrok-free.app/oauth2/authorization/google";
+  "https://2cb5-70-176-250-188.ngrok-free.app/login/oauth2/code/google";
 
 const startGoogleLogin = async () => {
   try {

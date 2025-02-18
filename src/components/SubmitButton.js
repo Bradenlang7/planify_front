@@ -1,12 +1,13 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
-const SubmitButton = ({ onPressFunction, navRoute }) => {
-  const navigation = useNavigation();
+const SubmitButton = ({ onPressFunction, text }) => {
   return (
-    <TouchableOpacity style={styles.submitButton} onPress={onPressFunction()}>
-      <Text style={styles.buttonText}>Add Invitees</Text>
+    <TouchableOpacity
+      style={styles.submitButton}
+      onPress={() => onPressFunction()}
+    >
+      <Text style={styles.buttonText}>{text}</Text>
     </TouchableOpacity>
   );
 };
